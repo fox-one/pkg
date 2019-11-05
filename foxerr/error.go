@@ -31,7 +31,11 @@ func New(code int, msg string) error {
 	return e
 }
 
-func (e Error) Is(target error) bool {
+func (e *Error) Is(target error) bool {
+	if e == nil {
+		return target == nil
+	}
+
 	var err *Error
 	if errors.As(target, &err) {
 		return e.Code == err.Code
