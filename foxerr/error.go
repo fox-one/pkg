@@ -1,6 +1,7 @@
 package foxerr
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -28,4 +29,13 @@ func New(code int, msg string) error {
 	}
 
 	return e
+}
+
+func (e Error) Is(target error) bool {
+	var err *Error
+	if errors.As(target, &err) {
+		return e.Code == err.Code
+	}
+
+	return false
 }
