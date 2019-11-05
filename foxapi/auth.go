@@ -24,3 +24,21 @@ func AuthorizeToken(ctx context.Context, clientID, clientSecret, code, verifier 
 
 	return &token, nil
 }
+
+func RefreshToken(ctx context.Context, refreshToken string) (*Token, error) {
+	resp, err := request(ctx).SetBody(map[string]interface{}{
+		"grant_type":    "refresh_token",
+		"refresh_token": refreshToken,
+	}).Post("/oauth/token")
+
+	if err != nil {
+		return nil, err
+	}
+
+	var token Token
+	if err := decodeResponse(resp, &token); err != nil {
+		return nil, err
+	}
+
+	return &token, nil
+}

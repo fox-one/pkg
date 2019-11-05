@@ -3,7 +3,6 @@ package foxapi
 import (
 	"context"
 	"encoding/json"
-	"errors"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/fox-one/pkg/foxerr"
@@ -39,7 +38,7 @@ func decodeResponse(resp *resty.Response, data interface{}) error {
 
 	if err := json.Unmarshal(resp.Body(), &body); err != nil {
 		if resp.IsError() {
-			return errors.New(resp.Status())
+			return foxerr.New(resp.StatusCode(), resp.Status())
 		}
 
 		return err
