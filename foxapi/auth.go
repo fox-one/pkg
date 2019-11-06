@@ -25,10 +25,13 @@ func AuthorizeToken(ctx context.Context, clientID, clientSecret, code, verifier 
 	return &token, nil
 }
 
-func RefreshToken(ctx context.Context, refreshToken string) (*Token, error) {
+// RefreshToken return new access token by refresh token
+// old access token will still be alive in transation minutes
+func RefreshToken(ctx context.Context, refreshToken string, transation int) (*Token, error) {
 	resp, err := request(ctx).SetBody(map[string]interface{}{
 		"grant_type":    "refresh_token",
 		"refresh_token": refreshToken,
+		"transation":    transation,
 	}).Post("/oauth/token")
 
 	if err != nil {
