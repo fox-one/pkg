@@ -12,6 +12,10 @@ type loggerKey struct{}
 // L is an alias for the the standard logger.
 var L = logrus.NewEntry(logrus.StandardLogger())
 
+func AddHook(hook logrus.Hook) {
+	L.Logger.AddHook(hook)
+}
+
 // WithContext returns a new context with the provided logger. Use in
 // combination with logger.WithField(s) for great effect.
 func WithContext(ctx context.Context, logger *logrus.Entry) context.Context {
