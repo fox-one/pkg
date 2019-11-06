@@ -1,0 +1,11 @@
+# etf description
+etf_description_BTC = "BTC is a cryptocurrency designed by Satoshi Nakamoto, regarded as gold in digital assets. It is based on decentralization, using the P2P network and consensus initiative, open-source code, as the underlying technology."
+etf_description_EOS = "EOS is a blockchain operating system designed for commercial distributed applications. EOS aims to realize the performance expansion of distributed applications."
+etf_description_BOX = "BOX is an open and transparent fund product. The component is composed of three objects, which are BTC, EOS, XIN."
+etf_description_XIN = "XIN is a token issued by Mixin. Mixin Network is a free and lightning-fast peer-to-peer transactional network for digital assets, adopts 0-knowledge proof and TEE technology, with high throughput and low delay."
+etf_description_XMR = "Monero (XMR) is a private, secure, and untraceable cryptocurrency. With Monero, you are in complete control of your funds and privacy no one else can see anyone else's balances or transactions."
+etf_description_ETH = "Ethereum (ETH) is a smart contract platform that enables developers to build DApp. Smart contracts allow for code to be run exactly as programmed without any possibility of downtime, censorship, fraud or third-party interference. "
+
+plan_fund_shortage_notification = "Your balance is not enough to execute tomorrow's regular investment plan: {{.etf}}, please recharge."
+schedule_fund_shortage_notification = "Your balance is not enough to execute regular investment plan: {{.etf}}, please recharge."
+schedule_filled_notification = "It's time to execute your regular investment for {{.etf}}. {{.quantity}} {{.symbol}} purchased, average price {{.price}} USDT. Check your wallet for details."

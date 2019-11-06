@@ -1,0 +1,11 @@
+# etf description
+etf_description_BTC = "BTC 是一种由中本聪设计的加密货币，被认为是黄金。基于去中心化，使用点对点网络，共识机制，开源代码作为底层技术。"
+etf_description_EOS = "EOS 是为商业分布式应用设计的区块链操作系统。EOS 旨在实现分布式应用的性能扩展。"
+etf_description_BOX = "BOX 是一个完全公开、透明的基金产品。成分由三个标的构成，分别是 BTC, EOS, XIN。"
+etf_description_XIN = "XIN 是由 Mixin 团队发行的代币。基于免费和闪电般快速的点对点交易的 Mixin 网络。Mixin 网络采用了零知识证明和可信执行环境技术，具有高吞吐量和低延迟性的特点"
+etf_description_XMR = "门罗币是一种私有、安全且不可跟踪的加密货币。你可以完全控制你的资金和隐私，其他人不能看到任何人的余额或交易。"
+etf_description_ETH = "以太坊是一个为去中心化应用（DApp）而生的全球开源平台。 通过其专用加密货币以太币提供去中心化的虚拟机来处理点对点合约，编写代码管理数字资产、运行程序等。"
+
+plan_fund_shortage_notification = "你的氢定投余额不足以执行明天的定投计划： {{.etf}}，请及时充值。"
+schedule_fund_shortage_notification = "你的氢定投余额不足以执行定投计划：{{.etf}}，请及时充值。"
+schedule_filled_notification = "今天是你计划定投 {{.etf}} 的时间，已经完成定投，成功购买 {{.quantity}} {{.symbol}}，均价 {{.price}} USDT，请查看你的钱包。"

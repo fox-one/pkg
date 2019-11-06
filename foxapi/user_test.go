@@ -13,6 +13,6 @@ func TestUserMe(t *testing.T) {
 	t.Run("invalid token", func(t *testing.T) {
 		user, err := UserMe(ctx, "invalid token")
 		assert.Nil(t, user)
-		assert.True(t, IsError(err, ErrAuthFailed))
+		assert.True(t, err == ErrAuthFailed)
 	})
 }

@@ -45,7 +45,7 @@ func decodeResponse(resp *resty.Response, data interface{}) error {
 	}
 
 	if err := body.Error; err != nil && err.Code > 0 {
-		return err
+		return convertError(err)
 	}
 
 	if data != nil {
