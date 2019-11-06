@@ -9,7 +9,7 @@ import (
 	"text/tabwriter"
 )
 
-var tab = "\t"
+const tab = "\t"
 
 func formatLine(line []string) string {
 	if len(line) == 0 {
