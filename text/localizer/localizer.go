@@ -36,7 +36,7 @@ func NewWithBundle(bundle *i18n.Bundle) *Localizer {
 func WithLanguage(l *Localizer, langs ...string) *Localizer {
 	return &Localizer{
 		bundle:    l.bundle,
-		languages: append(l.languages, langs...),
+		languages: append(langs, l.languages...),
 	}
 }
 
