@@ -30,7 +30,9 @@ func Fprint(out io.Writer, lines [][]string) error {
 	w := tabwriter.NewWriter(out, 0, 0, 1, ' ', 0)
 
 	for idx := range lines {
-		fmt.Fprintln(w, formatLine(lines[idx]))
+		if _, err := fmt.Fprintln(w, formatLine(lines[idx])); err != nil {
+			return err
+		}
 	}
 
 	return w.Flush()
