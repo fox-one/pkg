@@ -1,22 +1,19 @@
 package telesign
 
-import (
-	"context"
-
-	"github.com/go-resty/resty/v2"
-)
-
-var client *resty.Client
-
-func request(ctx context.Context) *resty.Request {
-	if client == nil {
-		client = resty.New().SetHostURL("https://rest-ww.telesign.com/v1")
-	}
-
-	return client.R().SetContext(ctx)
-}
+import "context"
 
 type Client struct {
 	Key    string
 	Secret string
+}
+
+func NewClient(key, secret string) *Client {
+	return &Client{
+		Key:    key,
+		Secret: secret,
+	}
+}
+
+func (c *Client) SendMessage(ctx context.Context, msg Message) error {
+	return SendMessage(ctx, c.Key, c.Secret, msg)
 }

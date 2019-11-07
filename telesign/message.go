@@ -58,7 +58,3 @@ func SendMessage(ctx context.Context, key, secret string, msg Message) error {
 
 	return fmt.Errorf("telesign: %d %s", code, description)
 }
-
-func (c *Client) SendMessage(ctx context.Context, msg Message) error {
-	return SendMessage(ctx, c.Key, c.Secret, msg)
-}
