@@ -1,25 +1,10 @@
 package foxapi
 
 import (
+	"context"
+
 	"github.com/shopspring/decimal"
 )
-
-type User struct {
-	ID          string `json:"id,omitempty"`
-	Avatar      string `json:"avatar,omitempty"`
-	Name        string `json:"fullname,omitempty"`
-	Language    string `json:"language,omitempty"`
-	PhoneCode   string `json:"phone_code,omitempty"`
-	PhoneNumber string `json:"phone_number,omitempty"`
-}
-
-type Token struct {
-	AccessToken  string `json:"access_token,omitempty"`
-	RefreshToken string `json:"refresh_token,omitempty"`
-	ExpiresIn    int64  `json:"expires_in,omitempty"`
-	Scope        string `json:"scope,omitempty"`
-	TokenType    string `json:"token_type,omitempty"` // bearer
-}
 
 type Asset struct {
 	AssetID       string          `json:"asset_id,omitempty"`
@@ -41,4 +26,45 @@ type Asset struct {
 	Tag         string          `json:"tag,omitempty"`
 
 	Chain *Asset `json:"chain,omitempty"`
+}
+
+func ReadAssets(ctx context.Context, accessToken string) ([]*Asset, error) {
+	resp, err := request(ctx).SetAuthToken(accessToken).Get("/wallet/assets")
+	if err != nil {
+		return nil, err
+	}
+
+	var assets []*Asset
+	err = decodeResponse(resp, &assets)
+	return assets, err
+}
+
+func ReadAsset(ctx context.Context, accessToken string, assetID string) (*Asset, error) {
+	resp, err := request(ctx).SetAuthToken(accessToken).Get("/wallet/asset/" + assetID)
+	if err != nil {
+		return nil, err
+	}
+
+	var asset Asset
+	err = decodeResponse(resp, &asset)
+	return &asset, err
+}
+
+func SearchAssets(ctx context.Context, symbol string, fuzzy bool) ([]*Asset, error) {
+	params := map[string]string{
+		"symbol": symbol,
+	}
+
+	if fuzzy {
+		params["mode"] = "fuzzy"
+	}
+
+	resp, err := request(ctx).SetQueryParams(params).Get("/wallet/search-assets")
+	if err != nil {
+		return nil, err
+	}
+
+	var assets []*Asset
+	err = decodeResponse(resp, &assets)
+	return assets, err
 }
