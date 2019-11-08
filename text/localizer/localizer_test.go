@@ -32,3 +32,15 @@ func TestLoadYaml(t *testing.T) {
 		t.Log(data)
 	}
 }
+
+func TestWithLanguage(t *testing.T) {
+	l := &Localizer{}
+
+	l = WithLanguage(l, language.SimplifiedChinese.String())
+	assert.Equal(t, []string{language.SimplifiedChinese.String()}, l.languages)
+	assert.Equal(t, language.SimplifiedChinese.String(), l.PrimaryLanguage())
+
+	l = WithLanguage(l, language.English.String())
+	assert.Equal(t, []string{language.English.String(), language.SimplifiedChinese.String()}, l.languages)
+	assert.Equal(t, language.English.String(), l.PrimaryLanguage())
+}

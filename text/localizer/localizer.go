@@ -34,10 +34,33 @@ func NewWithBundle(bundle *i18n.Bundle) *Localizer {
 }
 
 func WithLanguage(l *Localizer, langs ...string) *Localizer {
+	var languages []string
+	for _, lang := range langs {
+		if tags, _, err := language.ParseAcceptLanguage(lang); err == nil {
+			for _, tag := range tags {
+				languages = append(languages, tag.String())
+			}
+		} else if tag, err := language.Parse(lang); err == nil {
+			languages = append(languages, tag.String())
+		}
+	}
+
 	return &Localizer{
 		bundle:    l.bundle,
-		languages: append(langs, l.languages...),
+		languages: append(languages, l.languages...),
 	}
+}
+
+func (l *Localizer) Languages() []string {
+	return l.languages[:]
+}
+
+func (l *Localizer) PrimaryLanguage() string {
+	if langs := l.Languages(); len(langs) > 0 {
+		return langs[0]
+	}
+
+	return ""
 }
 
 func (l *Localizer) Localize(id string, args ...interface{}) (string, error) {
