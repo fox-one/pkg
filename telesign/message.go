@@ -19,13 +19,15 @@ type Message struct {
 	Type    string `json:"type,omitempty" valid:"in(ARN|OTP)"` // default is OTP
 }
 
-func SendMessage(ctx context.Context, key, secret string, msg Message) error {
+func SendMessage(ctx context.Context, key, secret string, msg Message) (id, error) {
+	const emptyReferenceID = ""
+
 	if msg.Type == "" {
 		msg.Type = MessageTypeOTP
 	}
 
 	if _, err := govalidator.ValidateStruct(msg); err != nil {
-		return err
+		return emptyReferenceID, err
 	}
 
 	resp, err := request(ctx).
@@ -36,25 +38,26 @@ func SendMessage(ctx context.Context, key, secret string, msg Message) error {
 			"message_type": msg.Type,
 		}).Post("/messaging")
 	if err != nil {
-		return err
-	}
-
-	if resp.IsSuccess() {
-		return nil
+		return emptyReferenceID, err
 	}
 
 	code, description := resp.StatusCode(), resp.Status()
 
 	var body struct {
-		Status struct {
+		ReferenceID string `json:"reference_id,omitempty"`
+		Status      struct {
 			Code        int    `json:"code"`
 			Description string `json:"description"`
 		} `json:"status"`
+	}
+
+	if resp.IsSuccess() {
+		return body.ReferenceID, nil
 	}
 
 	if err := json.Unmarshal(resp.Body(), &body); err == nil && body.Status.Code > 0 {
 		code, description = body.Status.Code, body.Status.Description
 	}
 
-	return fmt.Errorf("telesign: %d %s", code, description)
+	return body.ReferenceID, fmt.Errorf("telesign: %d %s", code, description)
 }
