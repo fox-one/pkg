@@ -13,6 +13,7 @@ require (
 	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/hashicorp/golang-lru v0.5.3
+	github.com/jinzhu/gorm v1.9.11 // indirect
 	github.com/json-iterator/go v1.1.8
 	github.com/magiconair/properties v1.8.1
 	github.com/mattn/go-isatty v0.0.8 // indirect
