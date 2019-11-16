@@ -22,9 +22,7 @@ func ErrorStatus(c *gin.Context, err error, status int) {
 		view["hint"] = err.Error()
 	}
 
-	c.AbortWithStatusJSON(status, gin.H{
-		"error": view,
-	})
+	c.AbortWithStatusJSON(status, view)
 }
 
 func InternalError(c *gin.Context, err error) {
