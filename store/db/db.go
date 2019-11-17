@@ -1,4 +1,4 @@
-package database
+package db
 
 import (
 	"github.com/hashicorp/go-multierror"

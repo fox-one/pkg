@@ -5,11 +5,11 @@ import (
 	"time"
 
 	"github.com/fox-one/pkg/property"
-	"github.com/fox-one/pkg/store/database"
+	"github.com/fox-one/pkg/store/db"
 )
 
 func init() {
-	database.RegisterMigrate(func(db *database.DB) error {
+	db.RegisterMigrate(func(db *db.DB) error {
 		if err := db.Update().AutoMigrate(Property{}).Error; err != nil {
 			return err
 		}
@@ -25,17 +25,17 @@ type Property struct {
 }
 
 type propertyStore struct {
-	db *database.DB
+	db *db.DB
 }
 
-func New(db *database.DB) property.Store {
+func New(db *db.DB) property.Store {
 	return &propertyStore{db: db}
 }
 
 func (s *propertyStore) Get(ctx context.Context, key string) (property.Value, error) {
 	var p Property
 	err := s.db.View().Where("`key` = ?", key).First(&p).Error
-	if database.IsErrorNotFound(err) {
+	if db.IsErrorNotFound(err) {
 		err = nil
 	}
 
