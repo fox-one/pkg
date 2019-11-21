@@ -9,6 +9,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fox-one/mixin-sdk v0.0.8
 	github.com/gin-gonic/gin v1.4.0
+	github.com/go-redis/redis v6.15.6+incompatible // indirect
 	github.com/go-resty/resty/v2 v2.1.0
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/go-yaml/yaml v2.1.0+incompatible
