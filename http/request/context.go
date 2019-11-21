@@ -47,3 +47,8 @@ func WithLocalizer(l *localizer.Localizer) gin.HandlerFunc {
 func Localizer(c *gin.Context) *localizer.Localizer {
 	return c.MustGet(localizerContextKey).(*localizer.Localizer)
 }
+
+func IsSuccess(c *gin.Context) bool {
+	status := c.Writer.Status()
+	return status >= 200 && status < 400
+}
