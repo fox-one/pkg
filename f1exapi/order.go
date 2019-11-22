@@ -28,7 +28,6 @@ type (
 		A uuid.UUID // asset
 		P string    // price
 		T string    // type
-		O uuid.UUID // order
 		M uuid.UUID // merchant
 	}
 
@@ -58,7 +57,6 @@ type PutOrderInput struct {
 	Side       string `valid:"in(ASK|BID),required"`
 	Type       string `valid:"in(LIMIT|MARKET),required"`
 	Price      string
-	TraceID    string `valid:"uuid"`
 	MerchantID string `valid:"uuid"`
 }
 
@@ -76,12 +74,7 @@ func PutOrder(input *PutOrderInput) (*PutOrderOutput, error) {
 	action := OrderAction{
 		S: input.Side,
 		T: input.Type,
-		O: uuid.FromStringOrNil(input.TraceID),
 		M: uuid.FromStringOrNil(input.MerchantID),
-	}
-
-	if action.O == uuid.Nil {
-		action.O, _ = uuid.NewV4()
 	}
 
 	var out PutOrderOutput
