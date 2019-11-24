@@ -39,6 +39,6 @@ func FromString(id string) (uuid.UUID, error) {
 }
 
 func IsNil(id string) bool {
-	uid, _ := FromString(id)
-	return uid == uuid.Nil
+	uid, err := FromString(id)
+	return err != nil || uid == uuid.Nil
 }
