@@ -20,6 +20,9 @@ const (
 	TransferSourceCancel = "CANCEL"
 	TransferSourceRefund = "REFUND"
 	TransferSourceMatch  = "MATCH"
+
+	TradeSideMaker = "MAKER"
+	TradeSideTaker = "TAKER"
 )
 
 type (
@@ -104,6 +107,20 @@ func PutOrder(input *PutOrderInput) (*PutOrderOutput, error) {
 
 	out.Memo = memo
 	return &out, nil
+}
+
+func ParsePutOrder(memo string) (*OrderAction, error) {
+	data, err := base64.StdEncoding.DecodeString(memo)
+	if err != nil {
+		return nil, err
+	}
+
+	handle := new(codec.MsgpackHandle)
+	decoder := codec.NewDecoderBytes(data, handle)
+
+	var action OrderAction
+	err = decoder.Decode(&action)
+	return &action, err
 }
 
 func ParseTransfer(memo string) (*TransferAction, error) {
