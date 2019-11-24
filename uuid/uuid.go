@@ -37,3 +37,8 @@ func Modify(id, modifier string) string {
 func FromString(id string) (uuid.UUID, error) {
 	return uuid.FromString(id)
 }
+
+func IsNil(id string) bool {
+	uid, _ := FromString(id)
+	return uid == uuid.Nil
+}
