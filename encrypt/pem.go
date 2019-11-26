@@ -28,3 +28,12 @@ func ParsePrivatePem(value string) (pri, pub interface{}, err error) {
 
 	return
 }
+
+func ParsePublicPem(value string) (interface{}, error) {
+	block, _ := pem.Decode([]byte(value))
+	if block == nil {
+		return nil, errors.New("decode pem failed: block is nil")
+	}
+
+	return Public.Parse(block.Bytes)
+}
