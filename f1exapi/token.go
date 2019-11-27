@@ -13,5 +13,5 @@ type Claim struct {
 }
 
 func SignToken(claim Claim, key *ecdsa.PrivateKey) (string, error) {
-	return jwt.NewWithClaims(jwt.SigningMethodHS256, claim).SignedString(key)
+	return jwt.NewWithClaims(jwt.SigningMethodES256, claim).SignedString(key)
 }
