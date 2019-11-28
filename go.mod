@@ -23,7 +23,7 @@ require (
 	github.com/mattn/go-isatty v0.0.8 // indirect
 	github.com/mdp/qrterminal v1.0.1
 	github.com/nicksnyder/go-i18n/v2 v2.0.2
-	github.com/shopspring/decimal v0.0.0-20191009025716-f1972eb1d1f5
+	github.com/shopspring/decimal v0.0.0-20191125035519-b054a8dfd10d
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.4.0
 	github.com/ugorji/go/codec v1.1.7
