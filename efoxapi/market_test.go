@@ -1,4 +1,4 @@
-package foxapi
+package efoxapi
 
 import (
 	"context"
