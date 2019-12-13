@@ -4,6 +4,7 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/fox-one/pkg/pagination"
 	"github.com/shopspring/decimal"
 )
 
@@ -25,7 +26,7 @@ type (
 	}
 )
 
-func ListOrderReports(ctx context.Context, token, date, cursor string, limit int) ([]*OrderReport, string, error) {
+func ListOrderReports(ctx context.Context, token, date, cursor string, limit int) ([]*OrderReport, *pagination.Pagination, error) {
 	resp, err := request(ctx).
 		SetAuthToken(token).
 		SetQueryParams(map[string]string{
@@ -34,26 +35,18 @@ func ListOrderReports(ctx context.Context, token, date, cursor string, limit int
 			"limit":  strconv.Itoa(limit),
 		}).Get("/order-reports")
 	if err != nil {
-		return nil, "", err
+		return nil, nil, err
 	}
 
 	var body struct {
-		Reports    []*OrderReport `json:"reports,omitempty"`
-		Pagination struct {
-			HasNext    bool   `json:"has_next,omitempty"`
-			NextCursor string `json:"next_cursor,omitempty"`
-		} `json:"pagination,omitempty"`
+		Reports    []*OrderReport         `json:"reports,omitempty"`
+		Pagination *pagination.Pagination `json:"pagination,omitempty"`
 	}
 	if err := decodeResponse(resp, &body); err != nil {
-		return nil, "", err
+		return nil, nil, err
 	}
 
-	next := ""
-	if body.Pagination.HasNext {
-		next = body.Pagination.NextCursor
-	}
-
-	return body.Reports, next, nil
+	return body.Reports, body.Pagination, nil
 }
 
 func ListAllOrderReports(ctx context.Context, token string, date string) ([]*OrderReport, error) {
@@ -71,11 +64,11 @@ func ListAllOrderReports(ctx context.Context, token string, date string) ([]*Ord
 
 		reports = append(reports, list...)
 
-		if next == "" {
+		if !next.HasNext {
 			break
 		}
 
-		cursor = next
+		cursor = next.Next()
 	}
 
 	return reports, nil
