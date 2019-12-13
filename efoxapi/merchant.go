@@ -3,7 +3,6 @@ package efoxapi
 import (
 	"context"
 	"strconv"
-	"time"
 
 	"github.com/shopspring/decimal"
 )
@@ -26,11 +25,11 @@ type (
 	}
 )
 
-func ListOrderReports(ctx context.Context, token string, date time.Time, cursor string, limit int) ([]*OrderReport, string, error) {
+func ListOrderReports(ctx context.Context, token, date, cursor string, limit int) ([]*OrderReport, string, error) {
 	resp, err := request(ctx).
 		SetAuthToken(token).
 		SetQueryParams(map[string]string{
-			"date":   date.Format("2006-01-02"),
+			"date":   date,
 			"cursor": cursor,
 			"limit":  strconv.Itoa(limit),
 		}).Get("/order-reports")
@@ -57,7 +56,7 @@ func ListOrderReports(ctx context.Context, token string, date time.Time, cursor 
 	return body.Reports, next, nil
 }
 
-func ListAllOrderReports(ctx context.Context, token string, date time.Time) ([]*OrderReport, error) {
+func ListAllOrderReports(ctx context.Context, token string, date string) ([]*OrderReport, error) {
 	var (
 		reports []*OrderReport
 		cursor  string
