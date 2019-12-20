@@ -36,9 +36,13 @@ func (e *Error) Is(target error) bool {
 		return target == nil
 	}
 
-	var err *Error
-	if errors.As(target, &err) {
-		return e.Code == err.Code
+	return Match(target, e.Code)
+}
+
+func Match(err error, code int) bool {
+	var target *Error
+	if errors.As(err, &target) {
+		return target.Code == code
 	}
 
 	return false

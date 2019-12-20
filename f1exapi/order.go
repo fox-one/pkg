@@ -1,138 +1,88 @@
 package f1exapi
 
 import (
-	"encoding/base64"
-	"errors"
+	"context"
+	"strconv"
 
-	"github.com/asaskevich/govalidator"
-	"github.com/fox-one/pkg/number"
-	"github.com/gofrs/uuid"
-	"github.com/ugorji/go/codec"
+	"github.com/fox-one/pkg/pagination"
+	"github.com/shopspring/decimal"
 )
 
-const (
-	OrderSideASK = "ASK"
-	OrderSideBID = "BID"
-
-	OrderTypeLimit  = "LIMIT"
-	OrderTypeMarket = "MARKET"
-
-	TransferSourceCancel = "CANCEL"
-	TransferSourceRefund = "REFUND"
-	TransferSourceMatch  = "MATCH"
-
-	TradeSideMaker = "MAKER"
-	TradeSideTaker = "TAKER"
-)
-
-type (
-	OrderAction struct {
-		S string    // side
-		A uuid.UUID // asset
-		P string    // price
-		T string    // type
-		M uuid.UUID // merchant
-	}
-
-	TransferAction struct {
-		S string    // source
-		O uuid.UUID // order
-		A uuid.UUID // asset id
-		P string    // price
-		C string    // category, bid or ask
-	}
-)
-
-func (action *OrderAction) Encode() (string, error) {
-	memo := make([]byte, 140)
-	handle := new(codec.MsgpackHandle)
-	encoder := codec.NewEncoderBytes(&memo, handle)
-	if err := encoder.Encode(action); err != nil {
-		return "", err
-	}
-
-	return base64.StdEncoding.EncodeToString(memo), nil
+type Order struct {
+	OrderID         string          `json:"id"`
+	CreatedAt       int64           `json:"created_at"`
+	OrderType       string          `json:"order_type"`
+	UserID          string          `json:"user_id"`
+	QuoteAssetID    string          `json:"quote_asset_id"`
+	BaseAssetID     string          `json:"base_asset_id"`
+	Symbol          string          `json:"symbol"`
+	Side            string          `json:"side"`
+	Price           decimal.Decimal `json:"price"`
+	RemainingAmount decimal.Decimal `json:"remaining_amount"`
+	FilledAmount    decimal.Decimal `json:"filled_amount"`
+	RemainingFunds  decimal.Decimal `json:"remaining_fund"`
+	FilledFunds     decimal.Decimal `json:"filled_fund"`
+	State           string          `json:"state"`
 }
 
-type PutOrderInput struct {
-	Base       string `valid:"uuid,required"`
-	Quote      string `valid:"uuid,required"`
-	Side       string `valid:"in(ASK|BID),required"`
-	Type       string `valid:"in(LIMIT|MARKET),required"`
-	Price      string
-	MerchantID string `valid:"uuid"`
+type QueryOrdersInput struct {
+	Symbol string
+	Side   string
+	Cursor string
+	Limit  int
+	Order  string
+	State  string
+	Start  int64 // 单位秒
+	End    int64 // 单位秒
 }
 
-type PutOrderOutput struct {
-	AssetID  string
-	Memo     string
-	Opponent string
+func (input *QueryOrdersInput) toParams() map[string]string {
+	params := map[string]string{
+		"symbol": input.Symbol,
+		"cursor": input.Cursor,
+	}
+
+	if input.Side != "" {
+		params["side"] = input.Side
+	}
+
+	if input.Limit > 0 {
+		params["limit"] = strconv.Itoa(input.Limit)
+	}
+
+	if input.Order != "" {
+		params["order"] = input.Order
+	}
+
+	if input.State != "" {
+		params["state"] = input.State
+	}
+
+	if input.Start > 0 {
+		params["start"] = strconv.FormatInt(input.Start, 10)
+	}
+
+	if input.End > 0 {
+		params["end"] = strconv.FormatInt(input.End, 10)
+	}
+
+	return params
 }
 
-func PutOrder(input *PutOrderInput) (*PutOrderOutput, error) {
-	if _, err := govalidator.ValidateStruct(input); err != nil {
-		return nil, err
-	}
-
-	action := OrderAction{
-		S: input.Side,
-		T: input.Type,
-		M: uuid.FromStringOrNil(input.MerchantID),
-	}
-
-	var out PutOrderOutput
-
-	switch input.Side {
-	case OrderSideASK:
-		out.AssetID = input.Base
-		action.A = uuid.FromStringOrNil(input.Quote)
-	case OrderSideBID:
-		out.AssetID = input.Quote
-		action.A = uuid.FromStringOrNil(input.Base)
-	}
-
-	if input.Type == OrderTypeLimit {
-		price := number.Decimal(input.Price)
-		if !price.IsPositive() {
-			return nil, errors.New("price must be positive for limit order")
-		}
-
-		action.P = price.String()
-	}
-
-	memo, err := action.Encode()
+func QueryOrders(ctx context.Context, token string, input *QueryOrdersInput) ([]*Order, *pagination.Pagination, error) {
+	resp, err := request(ctx).SetAuthToken(token).SetQueryParams(input.toParams()).Get("/orders")
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	out.Memo = memo
-	return &out, nil
-}
-
-func ParsePutOrder(memo string) (*OrderAction, error) {
-	data, err := base64.StdEncoding.DecodeString(memo)
-	if err != nil {
-		return nil, err
+	var body struct {
+		Pagination *pagination.Pagination `json:"pagination,omitempty"`
+		Orders     []*Order               `json:"orders,omitempty"`
 	}
 
-	handle := new(codec.MsgpackHandle)
-	decoder := codec.NewDecoderBytes(data, handle)
-
-	var action OrderAction
-	err = decoder.Decode(&action)
-	return &action, err
-}
-
-func ParseTransfer(memo string) (*TransferAction, error) {
-	data, err := base64.StdEncoding.DecodeString(memo)
-	if err != nil {
-		return nil, err
+	if err := decodeResponse(resp, &body); err != nil {
+		return nil, nil, err
 	}
 
-	handle := new(codec.MsgpackHandle)
-	decoder := codec.NewDecoderBytes(data, handle)
-
-	var action TransferAction
-	err = decoder.Decode(&action)
-	return &action, err
+	return body.Orders, body.Pagination, nil
 }

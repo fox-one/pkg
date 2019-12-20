@@ -1,4 +1,4 @@
-package foxapi
+package f1exapi
 
 import (
 	"context"
@@ -10,8 +10,7 @@ import (
 )
 
 const (
-	Endpoint    = "https://api.fox.one/api/v2"
-	EndpointDev = "https://dev.fox.one/api/v2"
+	Endpoint = "https://exchange.fox.one"
 )
 
 var client = resty.New().
@@ -33,7 +32,6 @@ func request(ctx context.Context) *resty.Request {
 func decodeResponse(resp *resty.Response, data interface{}) error {
 	var body struct {
 		*foxerr.Error
-		Data json.RawMessage `json:"data,omitempty"`
 	}
 
 	if err := json.Unmarshal(resp.Body(), &body); err != nil {
@@ -49,7 +47,7 @@ func decodeResponse(resp *resty.Response, data interface{}) error {
 	}
 
 	if data != nil {
-		if err := json.Unmarshal(body.Data, data); err != nil {
+		if err := json.Unmarshal(resp.Body(), data); err != nil {
 			return err
 		}
 	}

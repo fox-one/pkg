@@ -4,9 +4,21 @@ import (
 	"crypto"
 	"encoding/base64"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/fox-one/pkg/encrypt"
 	"github.com/ugorji/go/codec"
 )
+
+type Claim struct {
+	jwt.StandardClaims
+	MerchantID string `json:"mid,omitempty"`
+	UserID     string `json:"uid,omitempty"`
+}
+
+// SignToken with ecdsa private key
+func SignToken(claim Claim, key interface{}) (string, error) {
+	return jwt.NewWithClaims(jwt.SigningMethodES256, claim).SignedString(key)
+}
 
 func EncodeAuthMemo(key crypto.PublicKey) (string, error) {
 	bytes, err := encrypt.Public.Marshal(key)
