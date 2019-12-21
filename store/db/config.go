@@ -31,7 +31,7 @@ func open(dialect, host string, port int, user, password, database string) (*gor
 	var uri string
 	switch dialect {
 	case "mysql":
-		uri = fmt.Sprintf("%s:%s@%s(%s:%d)/%s?parseTime=True&charset=utf8mb4",
+		uri = fmt.Sprintf("%s:%s@%s(%s:%d)/%s?parseTime=True&charset=utf8mb4,utf8",
 			user,
 			password,
 			"tcp",
@@ -58,7 +58,7 @@ func open(dialect, host string, port int, user, password, database string) (*gor
 	if err != nil {
 		return nil, err
 	}
-	db.DB().SetMaxIdleConns(10)
+
 	return db, nil
 }
 
