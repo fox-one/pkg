@@ -25,7 +25,8 @@ func (db *DB) Migrate(dir string) (*migrate.Migrate, error) {
 		driver, _ = sqlite3.WithInstance(db.conn.DB, &sqlite3.Config{})
 	}
 
-	source := url.URL{Scheme: "file", Path: dir}.String()
+	u := url.URL{Scheme: "file", Path: dir}
+	source := u.String()
 	return migrate.NewWithDatabaseInstance(source, string(db.Driver()), driver)
 }
 
