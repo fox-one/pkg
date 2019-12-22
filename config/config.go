@@ -29,23 +29,39 @@ func Load(configFile string, typ string, v interface{}) error {
 		}
 	}
 
+	data, err := jsoniter.Marshal(viper.AllSettings())
+	if err != nil {
+		return err
+	}
+
+	if err := jsoniter.Unmarshal(data, v); err != nil {
+		return err
+	}
+
 	if DATA != "" {
 		data, err := base64.StdEncoding.DecodeString(DATA)
 		if err != nil {
 			return err
 		}
 
-		if err := viper.MergeConfig(bytes.NewBuffer(data)); err != nil {
+		embed := viper.New()
+		embed.SetConfigType("yaml")
+
+		if err := embed.ReadConfig(bytes.NewBuffer(data)); err != nil {
+			return err
+		}
+
+		embedData, err := jsoniter.Marshal(embed.AllSettings())
+		if err != nil {
+			return err
+		}
+
+		if err := jsoniter.Unmarshal(embedData, v); err != nil {
 			return err
 		}
 	}
 
-	data, err := jsoniter.Marshal(viper.AllSettings())
-	if err != nil {
-		return err
-	}
-
-	return jsoniter.Unmarshal(data, v)
+	return nil
 }
 
 func LoadYaml(configFile string, v interface{}) error {

@@ -36,5 +36,9 @@ func (db *DB) MigrateUp(dir string) error {
 		return err
 	}
 
-	return m.Up()
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		return err
+	}
+
+	return nil
 }
