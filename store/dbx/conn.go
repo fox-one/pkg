@@ -7,7 +7,6 @@ package dbx
 import (
 	"database/sql"
 	"sync"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -55,12 +54,5 @@ func Connect(driver, dataSource string) (*DB, error) {
 // a connection can be established before we proceed with the
 // database setup and migration.
 func pingDatabase(db *sql.DB) (err error) {
-	for i := 0; i < 30; i++ {
-		err = db.Ping()
-		if err == nil {
-			return
-		}
-		time.Sleep(time.Second)
-	}
-	return
+	return db.Ping()
 }
