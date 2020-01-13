@@ -12,10 +12,10 @@ type Target struct {
 }
 
 type Airdrop struct {
-	AssetID   string `json:"asset_id"`
-	Amount    string `json:"amount"`
-	Recipient string `json:"recipient"`
-	TraceID   string `json:"trace_id"`
+	AssetID   string          `json:"asset_id"`
+	Amount    decimal.Decimal `json:"amount"`
+	Recipient string          `json:"recipient"`
+	TraceID   string          `json:"trace_id"`
 }
 
 func PutAirdrop(ctx context.Context, owner, traceID, assetID, memo string, targets []Target) (*Airdrop, error) {
