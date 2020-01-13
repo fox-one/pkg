@@ -25,6 +25,20 @@ type Order struct {
 	State           string          `json:"state"`
 }
 
+func QueryOrder(ctx context.Context, token, orderID string) (*Order, error) {
+	resp, err := request(ctx).SetAuthToken(token).Get("/order/" + orderID)
+	if err != nil {
+		return nil, err
+	}
+
+	var order Order
+	if err := decodeResponse(resp, &order); err != nil {
+		return nil, err
+	}
+
+	return &order, nil
+}
+
 type QueryOrdersInput struct {
 	Symbol string
 	Side   string
