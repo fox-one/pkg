@@ -54,7 +54,7 @@ func (action *OrderAction) Encode() (string, error) {
 		return "", err
 	}
 
-	return base64.StdEncoding.EncodeToString(memo), nil
+	return base64.URLEncoding.EncodeToString(memo), nil
 }
 
 type PutOrderInput struct {
@@ -115,6 +115,10 @@ func PutOrder(input *PutOrderInput) (*PutOrderOutput, error) {
 func ParsePutOrder(memo string) (*OrderAction, error) {
 	data, err := base64.StdEncoding.DecodeString(memo)
 	if err != nil {
+		data, err = base64.URLEncoding.DecodeString(memo)
+	}
+
+	if err != nil {
 		return nil, err
 	}
 
@@ -128,6 +132,10 @@ func ParsePutOrder(memo string) (*OrderAction, error) {
 
 func ParseTransfer(memo string) (*TransferAction, error) {
 	data, err := base64.StdEncoding.DecodeString(memo)
+	if err != nil {
+		data, err = base64.URLEncoding.DecodeString(memo)
+	}
+
 	if err != nil {
 		return nil, err
 	}
