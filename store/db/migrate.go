@@ -13,13 +13,7 @@ func RegisterMigrate(fn MigrateFunc) {
 }
 
 func Migrate(db *DB) error {
-	db = &DB{
-		read:  db.read,
-		write: db.write.Set("gorm:table_options", "CHARSET=utf8mb4"),
-	}
-
 	var err *multierror.Error
-
 	for _, fn := range migrateFuncs {
 		err = multierror.Append(err, fn(db))
 	}
