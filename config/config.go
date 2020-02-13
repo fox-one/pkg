@@ -71,3 +71,15 @@ func LoadYaml(configFile string, v interface{}) error {
 func LoadJson(configFile string, v interface{}) error {
 	return Load(configFile, "json", v)
 }
+
+type H map[string]interface{}
+
+func SetDefaults(defaults H) {
+	for k, v := range defaults {
+		SetDefault(k, v)
+	}
+}
+
+func SetDefault(key string, value interface{}) {
+	viper.SetDefault(key, value)
+}
