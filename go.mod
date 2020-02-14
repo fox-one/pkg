@@ -34,7 +34,7 @@ require (
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
 	github.com/shopspring/decimal v0.0.0-20191125035519-b054a8dfd10d
 	github.com/sirupsen/logrus v1.4.2
-	github.com/spf13/viper v1.6.1 // indirect
+	github.com/spf13/viper v1.6.1
 	github.com/stretchr/testify v1.4.0
 	github.com/ugorji/go/codec v1.1.7
 	github.com/yiplee/structs v1.0.3 // indirect
