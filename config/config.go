@@ -87,16 +87,19 @@ func SetDefault(key string, value interface{}) {
 
 // load os environments to viper defaults
 // with prefix "fox"
-// FOX_DB_NAME -> db.name
-// FOX_NAME -> name
+// FOX_DB__NAME -> db.name
+// FOX_DB__BROKER_ID -> db.broker_id
 func AutomaticLoadEnv(prefix string) {
 	prefix = strings.ToLower(prefix) + "_"
 	for _, env := range os.Environ() {
 		items := strings.Split(env, "=")
-		if k, v := strings.ToLower(items[0]), items[1]; v != "" && strings.HasPrefix(k, prefix) {
-			k = strings.TrimPrefix(k, prefix)
-			k = strings.ReplaceAll(k, "__", ".")
-			SetDefault(k, v)
+		k, v := strings.ToLower(items[0]), items[1]
+		if v == "" || !strings.HasPrefix(k, prefix) {
+			continue
 		}
+
+		k = strings.TrimPrefix(k, prefix)
+		k = strings.ReplaceAll(k, "__", ".")
+		SetDefault(k, v)
 	}
 }
