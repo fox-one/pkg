@@ -30,20 +30,17 @@ func request(ctx context.Context) *resty.Request {
 }
 
 func decodeResponse(resp *resty.Response, data interface{}) error {
-	var body struct {
-		*foxerr.Error
-	}
-
-	if err := json.Unmarshal(resp.Body(), &body); err != nil {
-		if resp.IsError() {
-			return foxerr.New(resp.StatusCode(), resp.Status())
+	if resp.IsError() {
+		var body struct {
+			*foxerr.Error
 		}
 
-		return err
-	}
+		_ = json.Unmarshal(resp.Body(), &body)
+		if err := body.Error; err != nil && err.Code > 0 {
+			return err
+		}
 
-	if err := body.Error; err != nil && err.Code > 0 {
-		return err
+		return foxerr.New(resp.StatusCode(), resp.Status())
 	}
 
 	if data != nil {
