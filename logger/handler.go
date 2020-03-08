@@ -10,15 +10,20 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const (
+	RequestIdHeaderKey = "X-Request-ID"
+	RequestIdLogKey    = "request-id"
+)
+
 func Handler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id := c.GetHeader("X-Request-ID")
+		id := c.GetHeader(RequestIdHeaderKey)
 		if id == "" {
 			id = uuid.New()
 		}
 
 		ctx := c.Request.Context()
-		log := FromContext(ctx).WithField("request-id", id)
+		log := FromContext(ctx).WithField(RequestIdLogKey, id)
 		ctx = WithContext(ctx, log)
 		c.Request = c.Request.WithContext(ctx)
 
@@ -52,12 +57,12 @@ func Handler() gin.HandlerFunc {
 // Middleware provides logging middleware.
 func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		id := r.Header.Get("X-Request-ID")
+		id := r.Header.Get(RequestIdHeaderKey)
 		if id == "" {
 			id = uuid.New()
 		}
 		ctx := r.Context()
-		log := FromContext(ctx).WithField("request-id", id)
+		log := FromContext(ctx).WithField(RequestIdLogKey, id)
 		ctx = WithContext(ctx, log)
 		start := time.Now()
 		next.ServeHTTP(w, r.WithContext(ctx))
@@ -69,5 +74,22 @@ func Middleware(next http.Handler) http.Handler {
 			"latency": end.Sub(start),
 			"time":    end.Format(time.RFC3339),
 		}).Debug()
+	})
+}
+
+func WithRequestID(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		id := r.Header.Get(RequestIdHeaderKey)
+		if id == "" {
+			id = uuid.New()
+		}
+
+		w.Header().Set(RequestIdHeaderKey, id)
+
+		ctx := r.Context()
+		log := FromContext(ctx).WithField(RequestIdLogKey, id)
+		ctx = WithContext(ctx, log)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
