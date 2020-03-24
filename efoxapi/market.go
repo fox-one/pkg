@@ -49,12 +49,15 @@ type (
 	}
 
 	Pair struct {
-		Base           *Asset `json:"base,omitempty"`
-		Quote          *Asset `json:"quote,omitempty"`
-		CanBuy         bool   `json:"can_buy,omitempty"`
-		CanSell        bool   `json:"can_sell,omitempty"`
-		Symbol         string `json:"symbol,omitempty"`
-		PricePrecision int    `json:"price_precision,omitempty"`
+		Base           *Asset          `json:"base,omitempty"`
+		Quote          *Asset          `json:"quote,omitempty"`
+		CanBuy         bool            `json:"can_buy,omitempty"`
+		CanSell        bool            `json:"can_sell,omitempty"`
+		Symbol         string          `json:"symbol,omitempty"`
+		PricePrecision int             `json:"price_precision,omitempty"`
+		Change         decimal.Decimal `json:"change,omitempty"`
+		Price          decimal.Decimal `json:"price,omitempty"`
+		Exchange       string          `json:"exchange,omitempty"`
 	}
 )
 
@@ -70,4 +73,18 @@ func ReadMarket(ctx context.Context, symbol string) (*Market, error) {
 	}
 
 	return &market, nil
+}
+
+func ReadPairs(ctx context.Context) ([]*Pair, error) {
+	resp, err := request(ctx).Get("/pairs")
+	if err != nil {
+		return nil, err
+	}
+
+	var pairs []*Pair
+	if err := decodeResponse(resp, &pairs); err != nil {
+		return nil, err
+	}
+
+	return pairs, nil
 }
