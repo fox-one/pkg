@@ -2,6 +2,7 @@ package columnize
 
 import (
 	"bytes"
+	"encoding/csv"
 	"fmt"
 	"io"
 	"os"
@@ -62,4 +63,9 @@ func (f *Form) String() string {
 	var buff bytes.Buffer
 	_ = f.Fprint(&buff)
 	return buff.String()
+}
+
+func (f *Form) WriteCSV(out io.Writer) error {
+	w := csv.NewWriter(out)
+	return w.WriteAll(f.lines)
 }
