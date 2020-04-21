@@ -39,4 +39,5 @@ require (
 	github.com/yiplee/structs v1.0.3 // indirect
 	golang.org/x/sys v0.0.0-20200413165638-669c56c373c4 // indirect
 	golang.org/x/text v0.3.2
+	gopkg.in/yaml.v2 v2.2.8
 )
