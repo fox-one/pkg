@@ -1,8 +1,8 @@
 package pagination
 
 type Pagination struct {
-	NextCursor string `json:"next_cursor,omitempty"`
-	HasNext    bool   `json:"has_next,omitempty"`
+	NextCursor string `json:"next_cursor"`
+	HasNext    bool   `json:"has_next"`
 }
 
 func (p Pagination) Next() string {
