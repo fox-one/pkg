@@ -8,7 +8,7 @@ import (
 )
 
 func TestReadDepth(t *testing.T) {
-	d, err := ReadDepth(context.Background(), "BOXUSDT")
+	d, err := ReadDepth(context.Background(), "BOXUSDT", 10)
 	if assert.Nil(t, err) {
 		for _, order := range d.Asks {
 			price, amount := order.Values()

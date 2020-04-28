@@ -2,6 +2,7 @@ package f1exapi
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/shopspring/decimal"
 )
@@ -30,8 +31,11 @@ type Depth struct {
 	LastUpdateID int64 `json:"last_update_id,omitempty"`
 }
 
-func ReadDepth(ctx context.Context, symbol string) (*Depth, error) {
-	r, err := request(ctx).SetQueryParam("symbol", symbol).Get("/depth")
+func ReadDepth(ctx context.Context, symbol string, limit int) (*Depth, error) {
+	r, err := request(ctx).
+		SetQueryParam("symbol", symbol).
+		SetQueryParam("limit", strconv.Itoa(limit)).
+		Get("/depth")
 	if err != nil {
 		return nil, err
 	}
