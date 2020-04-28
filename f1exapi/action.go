@@ -28,29 +28,63 @@ const (
 	TradeSideTaker = "TAKER"
 )
 
-type (
-	OrderAction struct {
-		S string    // side
-		A uuid.UUID // asset
-		P string    // price
-		T string    // type
-		M uuid.UUID // merchant
+type OrderAction struct {
+	S string    // side
+	A uuid.UUID // asset
+	P string    // price
+	T string    // type
+	O uuid.UUID // order id
+	M uuid.UUID // merchant
+	U []byte    // user public key
+}
+
+func (action *OrderAction) toParams() map[string]interface{} {
+	params := map[string]interface{}{}
+
+	if action.S != "" {
+		params["S"] = action.S
 	}
 
-	TransferAction struct {
-		S string    // source
-		O uuid.UUID // order
-		A uuid.UUID // asset id
-		P string    // price
-		C string    // category, bid or ask
+	if action.A != uuid.Nil {
+		params["A"] = action.A
 	}
-)
+
+	if action.P != "" {
+		params["P"] = action.P
+	}
+
+	if action.T != "" {
+		params["T"] = action.T
+	}
+
+	if action.O != uuid.Nil {
+		params["O"] = action.O
+	}
+
+	if action.M != uuid.Nil {
+		params["M"] = action.M
+	}
+
+	if len(action.U) > 0 {
+		params["U"] = action.U
+	}
+
+	return params
+}
+
+type TransferAction struct {
+	S string    // source
+	O uuid.UUID // order
+	A uuid.UUID // asset id
+	P string    // price
+	C string    // category, bid or ask
+}
 
 func (action *OrderAction) Encode() (string, error) {
 	memo := make([]byte, 140)
 	handle := new(codec.MsgpackHandle)
 	encoder := codec.NewEncoderBytes(&memo, handle)
-	if err := encoder.Encode(action); err != nil {
+	if err := encoder.Encode(action.toParams()); err != nil {
 		return "", err
 	}
 
