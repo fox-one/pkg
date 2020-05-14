@@ -34,13 +34,11 @@ type (
 		Change decimal.Decimal `json:"change,omitempty"`
 		Buy    decimal.Decimal `json:"buy,omitempty"`
 		Sell   decimal.Decimal `json:"sell,omitempty"`
-		High   decimal.Decimal `json:"high,omitempty"`
-		Low    decimal.Decimal `json:"low,omitempty"`
-		Volume decimal.Decimal `json:"volume,omitempty"`
 	}
 
 	Asset struct {
 		AssetID   string                     `json:"asset_id,omitempty"`
+		Logo      string                     `json:"logo,omitempty"`
 		Symbol    string                     `json:"symbol,omitempty"`
 		Min       decimal.Decimal            `json:"min,omitempty"`
 		Minimums  map[string]decimal.Decimal `json:"minimums,omitempty"`
@@ -54,10 +52,16 @@ type (
 		CanBuy         bool            `json:"can_buy,omitempty"`
 		CanSell        bool            `json:"can_sell,omitempty"`
 		Symbol         string          `json:"symbol,omitempty"`
-		PricePrecision int             `json:"price_precision,omitempty"`
+		DisplaySymbol  string          `json:"display_symbol,omitempty"`
+		BasePrecision  int32           `json:"base_precision,omitempty"`
+		QuotePrecision int32           `json:"quote_precision,omitempty"`
+		PricePrecision int32           `json:"price_precision,omitempty"`
+		State          string          `json:"state,omitempty"`
+		Score          int64           `json:"score,omitempty"`
 		Change         decimal.Decimal `json:"change,omitempty"`
 		Price          decimal.Decimal `json:"price,omitempty"`
 		Exchange       string          `json:"exchange,omitempty"`
+		Strategies     []string        `json:"strategies,omitempty"`
 	}
 )
 
