@@ -35,6 +35,7 @@ require (
 	github.com/sirupsen/logrus v1.5.0
 	github.com/spf13/viper v1.6.3
 	github.com/stretchr/testify v1.5.1
+	github.com/twitchtv/twirp v5.11.0+incompatible // indirect
 	github.com/ugorji/go/codec v1.1.7
 	github.com/yiplee/structs v1.0.3 // indirect
 	golang.org/x/sys v0.0.0-20200413165638-669c56c373c4 // indirect
