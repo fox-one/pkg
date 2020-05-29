@@ -16,12 +16,14 @@ require (
 	github.com/docker/go-units v0.4.0 // indirect
 	github.com/fox-one/mixin-sdk v1.1.9
 	github.com/gin-gonic/gin v1.6.2
+	github.com/go-chi/chi v4.1.1+incompatible // indirect
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/go-resty/resty/v2 v2.2.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/golang-migrate/migrate v3.5.4+incompatible
+	github.com/gorilla/schema v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.0
 	github.com/hashicorp/golang-lru v0.5.4
 	github.com/jinzhu/gorm v1.9.12
@@ -33,6 +35,7 @@ require (
 	github.com/mdp/qrterminal v1.0.1
 	github.com/nicksnyder/go-i18n/v2 v2.0.3
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
+	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/shopspring/decimal v0.0.0-20200227202807-02e2044944cc
 	github.com/sirupsen/logrus v1.5.0
 	github.com/spf13/viper v1.6.3
