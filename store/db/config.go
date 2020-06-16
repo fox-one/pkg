@@ -17,6 +17,7 @@ type Config struct {
 	User     string `json:"user,omitempty"`
 	Password string `json:"password,omitempty"`
 	Database string `json:"database,omitempty"`
+	Location string `json:"location,omitempty"`
 	Debug    bool   `json:"debug,omitempty"`
 }
 
@@ -27,17 +28,18 @@ func SqliteInMemory() Config {
 	}
 }
 
-func open(dialect, host string, port int, user, password, database string) (*gorm.DB, error) {
+func open(dialect, host string, port int, user, password, database, loc string) (*gorm.DB, error) {
 	var uri string
 	switch dialect {
 	case "mysql":
-		uri = fmt.Sprintf("%s:%s@%s(%s:%d)/%s?parseTime=True&charset=utf8mb4,utf8",
+		uri = fmt.Sprintf("%s:%s@%s(%s:%d)/%s?parseTime=True&charset=utf8mb4,utf8&loc=%s",
 			user,
 			password,
 			"tcp",
 			host,
 			port,
 			database,
+			loc,
 		)
 	case "postgres":
 		uri = fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s",
@@ -63,7 +65,7 @@ func open(dialect, host string, port int, user, password, database string) (*gor
 }
 
 func Open(cfg Config) (*DB, error) {
-	write, err := open(cfg.Dialect, cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database)
+	write, err := open(cfg.Dialect, cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database, cfg.Location)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +76,7 @@ func Open(cfg Config) (*DB, error) {
 	}
 
 	if cfg.ReadHost != "" && cfg.ReadHost != cfg.Host {
-		db.read, err = open(cfg.Dialect, cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database)
+		db.read, err = open(cfg.Dialect, cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database, cfg.Location)
 		if err != nil {
 			return nil, err
 		}
