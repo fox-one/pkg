@@ -31,7 +31,7 @@ func open(dialect, host string, port int, user, password, database string) (*gor
 	var uri string
 	switch dialect {
 	case "mysql":
-		uri = fmt.Sprintf("%s:%s@%s(%s:%d)/%s?parseTime=True&charset=utf8mb4,utf8",
+		uri = fmt.Sprintf("%s:%s@%s(%s:%d)/%s?parseTime=True&charset=utf8mb4,utf8&loc=Local",
 			user,
 			password,
 			"tcp",
