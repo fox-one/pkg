@@ -10,16 +10,16 @@ import (
 )
 
 func TestPropertyStore(t *testing.T) {
-	db, err := db.Open(db.SqliteInMemory())
+	dbs, err := db.Open(db.SqliteInMemory())
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if err := db.Migrate(db); err != nil {
+	if err := db.Migrate(dbs); err != nil {
 		t.Fatal(err)
 	}
 
-	s := New(db)
+	s := New(dbs)
 	ctx := context.Background()
 
 	values := map[string]interface{}{
@@ -54,5 +54,18 @@ func TestPropertyStore(t *testing.T) {
 				t.Log(k, v.String())
 			}
 		}
+	})
+
+	t.Run("expire property", func(t *testing.T) {
+		for k := range values {
+			err := s.Expire(ctx, k)
+			assert.Nil(t, err)
+		}
+	})
+
+	t.Run("list values", func(t *testing.T) {
+		list, err := s.List(ctx)
+		assert.Nil(t, err)
+		assert.Len(t, list, 0)
 	})
 }

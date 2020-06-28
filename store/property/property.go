@@ -60,6 +60,10 @@ func (s *propertyStore) Save(ctx context.Context, key string, value interface{})
 	return nil
 }
 
+func (s *propertyStore) Expire(ctx context.Context, key string) error {
+	return s.db.Update().Where("key = ?", key).Delete(&Property{}).Error
+}
+
 func (s *propertyStore) List(ctx context.Context) (map[string]property.Value, error) {
 	var properties []Property
 	if err := s.db.View().Select([]string{"key", "value"}).Find(&properties).Error; err != nil {
