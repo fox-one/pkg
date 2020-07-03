@@ -34,7 +34,7 @@ func New(db *db.DB) property.Store {
 
 func (s *propertyStore) Get(ctx context.Context, key string) (property.Value, error) {
 	var p Property
-	err := s.db.View().Where("`key` = ?", key).First(&p).Error
+	err := s.db.View().Where("properties.key = ?", key).First(&p).Error
 	if db.IsErrorNotFound(err) {
 		err = nil
 	}
