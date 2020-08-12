@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/fox-one/hfox/util/number"
 	"github.com/shopspring/decimal"
 )
 
@@ -55,8 +54,8 @@ func (v Values) Sum() decimal.Decimal {
 	return sum
 }
 
-func (v Values) Mul(m decimal.Decimal) number.Values {
-	values := number.Values{}
+func (v Values) Mul(m decimal.Decimal) Values {
+	values := Values{}
 	for key, value := range v {
 		values[key] = value.Mul(m)
 	}
@@ -64,8 +63,8 @@ func (v Values) Mul(m decimal.Decimal) number.Values {
 	return values
 }
 
-func (v Values) Div(d decimal.Decimal) number.Values {
-	values := number.Values{}
+func (v Values) Div(d decimal.Decimal) Values {
+	values := Values{}
 	for key, value := range v {
 		values[key] = value.Div(d)
 	}
@@ -73,8 +72,8 @@ func (v Values) Div(d decimal.Decimal) number.Values {
 	return values
 }
 
-func (v Values) Truncate(p int32) number.Values {
-	values := number.Values{}
+func (v Values) Truncate(p int32) Values {
+	values := Values{}
 	for key, value := range v {
 		values[key] = value.Truncate(p)
 	}
