@@ -45,6 +45,33 @@ func (v Values) String() string {
 	return v.Encode()
 }
 
+func (v Values) Sum() decimal.Decimal {
+	sum := decimal.Zero
+	for _, value := range v {
+		sum = sum.Add(value)
+	}
+
+	return sum
+}
+
+func (v Values) Mul(m decimal.Decimal) {
+	for key, value := range v {
+		v[key] = value.Mul(m)
+	}
+}
+
+func (v Values) Div(d decimal.Decimal) {
+	for key, value := range v {
+		v[key] = value.Div(d)
+	}
+}
+
+func (v Values) Truncate(p int32) {
+	for key, value := range v {
+		v[key] = value.Truncate(p)
+	}
+}
+
 func ParseValues(input string) (Values, error) {
 	query, err := url.ParseQuery(input)
 	if err != nil {
