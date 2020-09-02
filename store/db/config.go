@@ -10,13 +10,13 @@ import (
 )
 
 type Config struct {
-	Dialect  string `json:"dialect,omitempty"` // mysql,postgres,sqlite3
-	Host     string `json:"host,omitempty"`    // if Dialect is `sqlite3`, host should be db file path
-	ReadHost string `json:"read_host,omitempty"`
-	Port     int    `json:"port,omitempty"`
-	User     string `json:"user,omitempty"`
-	Password string `json:"password,omitempty"`
-	Database string `json:"database,omitempty"`
+	Dialect  string `json:"dialect"` // mysql,postgres,sqlite3
+	Host     string `json:"host"`    // if Dialect is `sqlite3`, host should be db file path
+	ReadHost string `json:"read_host"`
+	Port     int    `json:"port"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	Database string `json:"database"`
 	Location string `json:"location,omitempty"`
 	Debug    bool   `json:"debug,omitempty"`
 }
