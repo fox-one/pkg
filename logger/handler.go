@@ -11,8 +11,9 @@ import (
 )
 
 const (
-	RequestIdHeaderKey = "X-Request-ID"
+	RequestIdHeaderKey = "X-Request-Id"
 	RequestIdLogKey    = "request-id"
+	ExposeHeaderKey    = "Access-Control-Expose-Headers"
 )
 
 func Handler() gin.HandlerFunc {
@@ -85,6 +86,7 @@ func WithRequestID(next http.Handler) http.Handler {
 		}
 
 		w.Header().Set(RequestIdHeaderKey, id)
+		w.Header().Set(ExposeHeaderKey, RequestIdHeaderKey)
 
 		ctx := r.Context()
 		log := FromContext(ctx).WithField(RequestIdLogKey, id)
