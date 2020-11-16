@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/BurntSushi/toml v0.3.1
-	github.com/RussellLuo/timingwheel v0.0.0-20200910091656-e3b03158e91e
+	github.com/RussellLuo/timingwheel v0.0.0-20191211035242-0e67dbf0ae97
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef
 	github.com/aws/aws-sdk-go v1.35.28
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869
