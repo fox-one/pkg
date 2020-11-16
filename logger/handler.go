@@ -28,6 +28,9 @@ func Handler() gin.HandlerFunc {
 		ctx = WithContext(ctx, log)
 		c.Request = c.Request.WithContext(ctx)
 
+		c.Writer.Header().Set(RequestIdHeaderKey, id)
+		c.Writer.Header().Add(ExposeHeaderKey, RequestIdHeaderKey)
+
 		start := time.Now()
 		c.Next()
 		end := time.Now()
@@ -86,7 +89,7 @@ func WithRequestID(next http.Handler) http.Handler {
 		}
 
 		w.Header().Set(RequestIdHeaderKey, id)
-		w.Header().Set(ExposeHeaderKey, RequestIdHeaderKey)
+		w.Header().Add(ExposeHeaderKey, RequestIdHeaderKey)
 
 		ctx := r.Context()
 		log := FromContext(ctx).WithField(RequestIdLogKey, id)
