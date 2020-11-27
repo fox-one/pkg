@@ -18,10 +18,16 @@ func init() {
 	})
 }
 
+const tableName = "properties"
+
 type Property struct {
 	Key       string         `gorm:"size:64;PRIMARY_KEY"`
 	Value     property.Value `gorm:"type:varchar(256)"`
 	UpdatedAt time.Time      `gorm:"precision:6"`
+}
+
+func (Property) TableName() string {
+	return tableName
 }
 
 type propertyStore struct {
@@ -34,7 +40,7 @@ func New(db *db.DB) property.Store {
 
 func (s *propertyStore) Get(ctx context.Context, key string) (property.Value, error) {
 	var p Property
-	err := s.db.View().Where("properties.key = ?", key).First(&p).Error
+	err := s.db.View().Where(tableName+".key = ?", key).First(&p).Error
 	if db.IsErrorNotFound(err) {
 		err = nil
 	}
@@ -61,12 +67,12 @@ func (s *propertyStore) Save(ctx context.Context, key string, value interface{})
 }
 
 func (s *propertyStore) Expire(ctx context.Context, key string) error {
-	return s.db.Update().Where("key = ?", key).Delete(&Property{}).Error
+	return s.db.Update().Where(tableName+".key = ?", key).Delete(&Property{}).Error
 }
 
 func (s *propertyStore) List(ctx context.Context) (map[string]property.Value, error) {
 	var properties []Property
-	if err := s.db.View().Select([]string{"key", "value"}).Find(&properties).Error; err != nil {
+	if err := s.db.View().Find(&properties).Error; err != nil {
 		return nil, err
 	}
 
