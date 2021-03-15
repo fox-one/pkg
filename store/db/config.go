@@ -28,6 +28,18 @@ func SqliteInMemory() Config {
 	}
 }
 
+func Connect(dialect, uri string) (*DB, error) {
+	coon, err := gorm.Open(dialect, uri)
+	if err != nil {
+		return nil, err
+	}
+
+	return &DB{
+		write: coon,
+		read:  coon,
+	}, nil
+}
+
 func open(dialect, host string, port int, user, password, database, loc string) (*gorm.DB, error) {
 	var uri string
 	switch dialect {
