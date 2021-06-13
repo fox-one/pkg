@@ -18,6 +18,7 @@ type Config struct {
 	Password string `json:"password"`
 	Database string `json:"database"`
 	Location string `json:"location,omitempty"`
+	SSLMode  string `json:"sslmode,omitempty"` // postgres has this property, which could be "disable"
 	Debug    bool   `json:"debug,omitempty"`
 }
 
@@ -40,7 +41,7 @@ func Connect(dialect, uri string) (*DB, error) {
 	}, nil
 }
 
-func open(dialect, host string, port int, user, password, database, loc string) (*gorm.DB, error) {
+func open(dialect, host string, port int, user, password, database, loc, sslmode string) (*gorm.DB, error) {
 	var uri string
 	switch dialect {
 	case "mysql":
@@ -54,12 +55,13 @@ func open(dialect, host string, port int, user, password, database, loc string) 
 			loc,
 		)
 	case "postgres":
-		uri = fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s",
+		uri = fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=%s",
 			host,
 			port,
 			user,
 			database,
 			password,
+			sslmode,
 		)
 	case "sqlite3", "sqlite":
 		dialect = "sqlite3"
@@ -77,7 +79,7 @@ func open(dialect, host string, port int, user, password, database, loc string) 
 }
 
 func Open(cfg Config) (*DB, error) {
-	write, err := open(cfg.Dialect, cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database, cfg.Location)
+	write, err := open(cfg.Dialect, cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database, cfg.Location, cfg.SSLMode)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +90,7 @@ func Open(cfg Config) (*DB, error) {
 	}
 
 	if cfg.ReadHost != "" && cfg.ReadHost != cfg.Host {
-		db.read, err = open(cfg.Dialect, cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database, cfg.Location)
+		db.read, err = open(cfg.Dialect, cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database, cfg.Location, cfg.SSLMode)
 		if err != nil {
 			return nil, err
 		}
