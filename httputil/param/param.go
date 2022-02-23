@@ -28,15 +28,31 @@ func Int64(r *http.Request, key string) int64 {
 	return cast.ToInt64(String(r, key))
 }
 
-// Binding decode request params to struct with json tag
+// Binding decode request params(url params or body) to struct with json tag
 func Binding(r *http.Request, v interface{}) error {
+	return binding(r, v, false)
+}
+
+// BindingBoth decode request params (url params and body) to struct with json tag
+// NOTE: if the method is not PATCH/POST/PUT, the request body will be ignored.
+func BindingBoth(r *http.Request, v interface{}) error {
+	return binding(r, v, true)
+}
+
+func binding(r *http.Request, v interface{}, both bool) error {
 	var err error
 
+	bodyBound := false
 	switch r.Method {
 	case http.MethodPatch, http.MethodPost, http.MethodPut:
+		bodyBound = true
 		err = bindingBody(r, v)
-	default:
-		err = bindingParams(r, v)
+	}
+
+	if !bodyBound || both {
+		if err == nil {
+			err = bindingParams(r, v)
+		}
 	}
 
 	if err == nil {
@@ -67,8 +83,10 @@ func bindingParams(r *http.Request, v interface{}) error {
 		}
 	}
 
-	if err := globalDecoder.Decode(v, values); err != nil {
-		return twirp.NewError(twirp.InvalidArgument, err.Error())
+	if len(values) > 0 {
+		if err := globalDecoder.Decode(v, values); err != nil {
+			return twirp.NewError(twirp.InvalidArgument, err.Error())
+		}
 	}
 
 	return nil
