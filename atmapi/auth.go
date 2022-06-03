@@ -4,7 +4,7 @@ import (
 	"crypto/ecdsa"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
 )
 
 func GenerateJWTToken(uid string, key *ecdsa.PrivateKey, exp time.Duration) (string, error) {

@@ -1,6 +1,6 @@
 package foxapi
 
-import "github.com/dgrijalva/jwt-go"
+import "github.com/golang-jwt/jwt"
 
 func ValidateToken(token string) error {
 	var claim jwt.StandardClaims

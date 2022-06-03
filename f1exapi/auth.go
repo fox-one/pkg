@@ -4,8 +4,8 @@ import (
 	"crypto"
 	"encoding/base64"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/fox-one/pkg/encrypt"
+	"github.com/golang-jwt/jwt"
 	"github.com/ugorji/go/codec"
 )
 
