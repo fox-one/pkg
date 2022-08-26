@@ -4,7 +4,8 @@ go 1.18
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
-	github.com/fox-one/pkg v1.5.8
+	github.com/fox-one/pkg/foxerr v0.0.1
+	github.com/fox-one/pkg/pagination v0.0.1
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/protobuf v1.5.2

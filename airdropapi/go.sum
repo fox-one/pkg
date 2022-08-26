@@ -3,8 +3,12 @@ github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d/go.mod h1:W
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/fox-one/pkg v1.5.8 h1:pskDchq8eMzpx7b44KKidARNLCsah5vn0+pOZRrbtCE=
-github.com/fox-one/pkg v1.5.8/go.mod h1:8yg6PUxOdoQBUT0mHRP0sUllaE40FK0Bp/kvTvOvvuo=
+github.com/fox-one/pkg/foxerr v0.0.1 h1:hD4lWZDtf7Y3J0bazBOqaH1egkQI95d/OaqR5V2Kgtc=
+github.com/fox-one/pkg/foxerr v0.0.1/go.mod h1:kxXuaZ8aY4N24HNjisvKwL3oN4bYype1yVKcDrl/MS0=
+github.com/fox-one/pkg/number v0.0.1 h1:fnPqMRMYTG9Y1iEc3ihLiG9VgN0IpJwmlX7wwabi4a8=
+github.com/fox-one/pkg/number v0.0.1/go.mod h1:TcBGohaSfRmiOPT2PFHTud9yENOIVKznDXIEmMIAO8s=
+github.com/fox-one/pkg/uuid v0.0.1 h1:ojw5qedSgjhnuiA3el1PzwoWr6/YCkGp2spoKCWv2WU=
+github.com/fox-one/pkg/uuid v0.0.1/go.mod h1:1XTcyCUoLnhroms+lrHzvIQOuu9pp/1BCX+0CrarZLg=
 github.com/go-resty/resty/v2 v2.7.0 h1:me+K9p3uhSmXtrBZ4k9jcEAfJmuC8IivWHwaLZwPrFY=
 github.com/go-resty/resty/v2 v2.7.0/go.mod h1:9PWDzw47qPphMRFfhsyk0NnSgvluHcljSMVIq3w7q0I=
 github.com/gofrs/uuid v4.2.0+incompatible h1:yyYWMnhkhrKwwr8gAOcOCYxOOscHgDS9yZgBrnJfGa0=

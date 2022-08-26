@@ -3,7 +3,7 @@ module github.com/fox-one/pkg/logger
 go 1.18
 
 require (
-	github.com/fox-one/pkg v1.5.8
+	github.com/fox-one/pkg/uuid v0.0.1
 	github.com/gin-gonic/gin v1.8.1
 	github.com/sirupsen/logrus v1.9.0
 )

@@ -4,7 +4,9 @@ go 1.18
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
-	github.com/fox-one/pkg v1.5.8
+	github.com/fox-one/pkg/foxerr v0.0.1
+	github.com/fox-one/pkg/number v0.0.1
+	github.com/fox-one/pkg/uuid v0.0.1
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/shopspring/decimal v1.3.1
 	github.com/stretchr/testify v1.8.0

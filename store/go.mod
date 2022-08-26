@@ -3,7 +3,7 @@ module github.com/fox-one/pkg/store
 go 1.18
 
 require (
-	github.com/fox-one/pkg v1.5.8
+	github.com/fox-one/pkg/property v0.0.1
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-migrate/migrate v3.5.4+incompatible
