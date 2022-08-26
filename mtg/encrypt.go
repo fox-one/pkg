@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"hash"
 
-	"github.com/fox-one/pkg/aes"
+	"github.com/fox-one/pkg/encrypt"
 	"golang.org/x/crypto/curve25519"
 )
 
@@ -74,7 +74,7 @@ func encryptWithAesKeyIv(body, prefix, key, iv []byte, h hash.Hash) ([]byte, err
 		body = append(h.Sum(nil), body...)
 	}
 
-	data, err := aes.Encrypt(body, key, iv)
+	data, err := encrypt.Encrypt(body, key, iv)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +86,7 @@ func encryptWithAesKeyIv(body, prefix, key, iv []byte, h hash.Hash) ([]byte, err
 }
 
 func decryptWithAseKeyIv(data, key, iv []byte, h hash.Hash) ([]byte, error) {
-	b, err := aes.Decrypt(data, key, iv)
+	b, err := encrypt.Decrypt(data, key, iv)
 	if err != nil {
 		return nil, err
 	}
