@@ -2,7 +2,10 @@ module github.com/fox-one/pkg/store
 
 go 1.18
 
+replace github.com/fox-one/pkg/db => ../db
+
 require (
+	github.com/fox-one/pkg/db v0.0.0-20220905083800-1a867d097a0e
 	github.com/fox-one/pkg/property v0.0.1
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-sql-driver/mysql v1.6.0
