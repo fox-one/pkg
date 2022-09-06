@@ -3,31 +3,12 @@ package db
 import (
 	"fmt"
 
+	"github.com/fox-one/pkg/db"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
-
-type Config struct {
-	Dialect  string `json:"dialect"` // mysql,postgres,sqlite3
-	Host     string `json:"host"`    // if Dialect is `sqlite3`, host should be db file path
-	ReadHost string `json:"read_host"`
-	Port     int    `json:"port"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Database string `json:"database"`
-	Location string `json:"location,omitempty"`
-	SSLMode  string `json:"sslmode,omitempty"` // postgres has this property, which could be "disable"
-	Debug    bool   `json:"debug,omitempty"`
-}
-
-func SqliteInMemory() Config {
-	return Config{
-		Dialect: "sqlite3",
-		Host:    ":memory:",
-	}
-}
 
 func Connect(dialect, uri string) (*DB, error) {
 	coon, err := gorm.Open(dialect, uri)
@@ -41,36 +22,12 @@ func Connect(dialect, uri string) (*DB, error) {
 	}, nil
 }
 
-func open(dialect, host string, port int, user, password, database, loc, sslmode string) (*gorm.DB, error) {
-	var uri string
-	switch dialect {
-	case "mysql":
-		uri = fmt.Sprintf("%s:%s@%s(%s:%d)/%s?parseTime=True&charset=utf8mb4,utf8&loc=%s",
-			user,
-			password,
-			"tcp",
-			host,
-			port,
-			database,
-			loc,
-		)
-	case "postgres":
-		uri = fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=%s",
-			host,
-			port,
-			user,
-			database,
-			password,
-			sslmode,
-		)
-	case "sqlite3", "sqlite":
+func open(dialect, dsn string) (*gorm.DB, error) {
+	if dialect == "sqlite" {
 		dialect = "sqlite3"
-		uri = host
-	default:
-		return nil, fmt.Errorf("unkonow db dialect: %s", dialect)
 	}
 
-	db, err := gorm.Open(dialect, uri)
+	db, err := gorm.Open(dialect, dsn)
 	if err != nil {
 		return nil, err
 	}
@@ -78,8 +35,13 @@ func open(dialect, host string, port int, user, password, database, loc, sslmode
 	return db, nil
 }
 
-func Open(cfg Config) (*DB, error) {
-	write, err := open(cfg.Dialect, cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database, cfg.Location, cfg.SSLMode)
+func Open(cfg db.Config) (*DB, error) {
+	dsn, err := cfg.DSN()
+	if err != nil {
+		return nil, err
+	}
+
+	write, err := open(cfg.Dialect, dsn)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +52,11 @@ func Open(cfg Config) (*DB, error) {
 	}
 
 	if cfg.ReadHost != "" && cfg.ReadHost != cfg.Host {
-		db.read, err = open(cfg.Dialect, cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database, cfg.Location, cfg.SSLMode)
+		readHostDSN, err := cfg.ReadHostDSN()
+		if err != nil {
+			return nil, err
+		}
+		db.read, err = open(cfg.Dialect, readHostDSN)
 		if err != nil {
 			return nil, err
 		}
@@ -103,7 +69,7 @@ func Open(cfg Config) (*DB, error) {
 	return db, nil
 }
 
-func MustOpen(cfg Config) *DB {
+func MustOpen(cfg db.Config) *DB {
 	db, err := Open(cfg)
 	if err != nil {
 		panic(fmt.Errorf("open db failed: %w", err))

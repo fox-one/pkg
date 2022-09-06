@@ -5,12 +5,13 @@ import (
 	"testing"
 	"time"
 
+	dbcommon "github.com/fox-one/pkg/db"
 	"github.com/fox-one/pkg/store/db"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestPropertyStore(t *testing.T) {
-	dbs, err := db.Open(db.SqliteInMemory())
+	dbs, err := db.Open(dbcommon.SqliteInMemory())
 	if err != nil {
 		t.Fatal(err)
 	}
