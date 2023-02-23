@@ -9,7 +9,7 @@ require (
 	github.com/magiconair/properties v1.8.6
 	github.com/nicksnyder/go-i18n/v2 v2.2.0
 	github.com/stretchr/testify v1.8.0
-	golang.org/x/text v0.3.7
+	golang.org/x/text v0.3.8
 )
 
 require (
