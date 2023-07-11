@@ -28,7 +28,7 @@ func (s *cacheProperties) Get(ctx context.Context, key string) (Value, error) {
 		s.cache.Set(key, v)
 	}
 
-	return v, nil
+	return v, err
 }
 
 func (s *cacheProperties) Save(ctx context.Context, key string, value interface{}) error {
