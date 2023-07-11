@@ -2,7 +2,10 @@ module github.com/fox-one/pkg/property
 
 go 1.18
 
-require github.com/stretchr/testify v1.8.0
+require (
+	github.com/stretchr/testify v1.8.0
+	github.com/yiplee/go-cache v1.0.5
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
