@@ -1,6 +1,7 @@
 package store2
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/fox-one/pkg/db"
@@ -85,4 +86,8 @@ func dialector(dialect string, dsn string) (gorm.Dialector, error) {
 	}
 
 	return d, nil
+}
+
+func IsErrorNotFound(err error) bool {
+	return errors.Is(err, gorm.ErrRecordNotFound)
 }
